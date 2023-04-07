@@ -1,4 +1,6 @@
 import User from '../models/user.js';
+import bcrypt from 'bcrypt';
+import {setCookie } from '../utils/feature.js';
 
 export const getUser = async (req, res) => {
     const query = {}
@@ -15,32 +17,70 @@ export const getUser = async (req, res) => {
     });
 }
 
-export const createUser = async (req, res) => {
+export const registerUser = async (req, res) => {
     const {name, email, password} = req.body;
 
-    await User.create({
-        name: name,
-        email: email,
-        password: password
-    });
+    let user = await User.find({email: email})
 
-    res.status(201).json({
-        success: true,
-        message: 'User created successfully',
-    });
+    if(user.length > 0){
+        return res.status(404).json({
+            success: false,
+            message: 'User already exists'
+        })
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    user = await User.create({
+            name: name,
+            email: email,
+            password: hashedPassword
+        });
+    
+    setCookie(user, res, 201, 'User Registered Successfully');
+}
+
+export const loginUser = async (req, res) => {
+    const {email, password} = req.body;
+
+    if(!email || !password){
+        return res.status(404).json({
+            success: false,
+            message: 'Please provide email and password'
+        })
+    }
+
+    const user = await User.findOne({email: email}).select('+password');
+
+    if(user){
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if(!isMatch){
+            return res.status(404).json({
+                success: false,
+                message: 'Invalid Credentials'
+            })
+        }
+
+        setCookie(user, res, 200, 'User Logged In Successfully');
+    }else{
+        return res.status(404).json({
+            success: false,
+            message: 'Invalid Credentials'
+        })
+    }
+
 }
 
 export const updateUser = async (req, res) => {
-    const { _id } = req.body;
+    const { id } = req.body;
     const query = {}
 
     if (req.body.name) query.name = req.body.name
     if (req.body.email) query.email = req.body.email
 
-    console.log(_id)
-    console.log(query);
 
-    await User.findByIdAndUpdate(_id, query);
+    await User.findByIdAndUpdate(id, query);
 
     res.status(200).json({
         success: true,
@@ -49,12 +89,26 @@ export const updateUser = async (req, res) => {
 }
 
 export const deleteUser = async (req, res) => {
-    const {id} = req.query;
+    const {id} = req.body;
 
     await User.findByIdAndRemove(id);
 
     res.status(200).json({
         success: true,
         message: 'User Deleted Successfully'
+    });
+}
+
+export const getProfile = async (req, res) => {
+    res.status(200).json({
+        success: true,
+        user: req.user
+    })
+}
+
+export const logoutUser = async (req, res) => {
+    res.status(200).clearCookie('token').json({
+        success: true,
+        message: 'User Logged Out Successfully'
     });
 }
