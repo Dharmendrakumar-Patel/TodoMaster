@@ -1,0 +1,66 @@
+{
+  "name": "todomaster-backend",
+  "version": "1.0.0",
+  "description": "TodoMaster is a powerful and intuitive task management app that helps you stay organized, productive, and in control of your daily tasks and responsibilities. With its sleek and user-friendly interface, TodoMaster is designed to be your ultimate companion in managing your to-do lists, setting reminders, and tracking your progress.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dharmendrakumar-Patel/TodoMaster.git"
+  },
+  "keywords": [
+    "Task",
+    "management",
+    "app",
+    "To-do",
+    "list",
+    "app",
+    "Productivity",
+    "app",
+    "Reminder",
+    "app",
+    "Task",
+    "organizer",
+    "Deadline",
+    "tracker",
+    "Priority",
+    "management",
+    "Progress",
+    "tracking",
+    "Collaboration",
+    "app",
+    "Task",
+    "sharing",
+    "Calendar",
+    "view",
+    "Search",
+    "and",
+    "filter",
+    "Customization",
+    "Backup",
+    "and",
+    "sync",
+    "Task",
+    "tracking",
+    "Time",
+    "management"
+  ],
+  "author": "Dharmendrakumar Patel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dharmendrakumar-Patel/TodoMaster/issues"
+  },
+  "homepage": "https://github.com/Dharmendrakumar-Patel/TodoMaster#readme",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
